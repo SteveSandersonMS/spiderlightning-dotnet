@@ -1,5 +1,11 @@
 ﻿<Project>
 
+	<PropertyGroup>
+		<RunCommand>slight</RunCommand>
+		<RunArguments>-c slightfile.toml run bin\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\AppBundle\$(AssemblyName).wasm -l</RunArguments>
+		<RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+	</PropertyGroup>
+
 	<Target Name="FixSpiderLightningPinvokes" AfterTargets="_GenerateManagedToNative">
 		<!-- As of .NET 8 Preview 4, all imports are fixed to be on the 'env' module because no module is specified in pinvokes.h -->
 		<!-- Fix this by injecting a module name -->

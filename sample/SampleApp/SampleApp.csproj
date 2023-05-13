@@ -9,7 +9,7 @@
 		<Nullable>enable</Nullable>
 		<RuntimeIdentifier>wasi-wasm</RuntimeIdentifier>
 		<WasmSingleFileBundle>true</WasmSingleFileBundle>
-    	<PublishTrimmed>true</PublishTrimmed>
+		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 
 	<ItemGroup>
