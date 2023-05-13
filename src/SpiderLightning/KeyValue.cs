@@ -2,16 +2,11 @@
 
 namespace SpiderLightning;
 
-public partial struct KeyValue
+public partial class KeyValue
 {
     private int _index;
 
-    private KeyValue(int index)
-    {
-        _index = index;
-    }
-
-    public static KeyValue Open(string name)
+    public KeyValue(string name)
     {
         // TODO: length should probably be the byte length
         Open(name, name.Length, out var result);
@@ -20,7 +15,7 @@ public partial struct KeyValue
             throw new InvalidOperationException($"KeyValue.Open failed with error {result.ErrorTag}");
         }
 
-        return new KeyValue(result.KeyValueIndex);
+        _index = result.KeyValueIndex;
     }
 
     public string Get(string key)
