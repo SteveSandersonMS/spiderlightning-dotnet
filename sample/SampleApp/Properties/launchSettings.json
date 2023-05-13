@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SampleApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+      }
+    }
+  }
+}
