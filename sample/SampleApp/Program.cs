@@ -1,4 +1,6 @@
 ﻿using SpiderLightning;
 
 Console.WriteLine("Hello, World!");
-KeyValue.Open(1, 2, 3);
+
+var result = KeyValue.Open("placeholder-name");
+Console.WriteLine("Result.KeyValueIndex: " + result);
