@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<!-- This is needed because we're using a ProjectReference. It would not be needed if we had a PackageReference -->
 	<Import Project="..\..\src\SpiderLightning\build\SpiderLightning.props" />
 
 	<PropertyGroup>
@@ -16,6 +17,7 @@
 		<ProjectReference Include="..\..\src\SpiderLightning\SpiderLightning.csproj" />
 	</ItemGroup>
 
+	<!-- This is needed because we're using a ProjectReference. It would not be needed if we had a PackageReference -->
 	<Import Project="..\..\src\SpiderLightning\build\SpiderLightning.targets" />
 
 </Project>
