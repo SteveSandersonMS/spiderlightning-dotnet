@@ -1,6 +1,6 @@
 ﻿using SpiderLightning;
 
-Console.WriteLine("Hello, World!");
+var keyValue = KeyValue.Open("placeholder-name");
+keyValue.Set("somekey", "Hello from .NET");
 
-var result = KeyValue.Open("placeholder-name");
-Console.WriteLine("Result.KeyValueIndex: " + result);
+Console.WriteLine(keyValue.Get("somekey"));
