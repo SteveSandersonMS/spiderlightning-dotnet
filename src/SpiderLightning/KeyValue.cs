@@ -46,7 +46,7 @@ public class KeyValue
     private static extern void Set(int index, WasiString name, WasiByteArray value, out OkResult<int> result);
 
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct WasiString
+    private unsafe struct WasiString
     {
         [MarshalAs(UnmanagedType.LPUTF8Str)]
         public string String;
@@ -61,7 +61,7 @@ public class KeyValue
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct WasiByteArray
+    private unsafe struct WasiByteArray
     {
         public byte[] Data;
         public int DataLength;
@@ -74,7 +74,7 @@ public class KeyValue
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct WasiResultBuffer
+    private unsafe struct WasiResultBuffer
     {
         public nint Data;
         public int DataLength;
@@ -86,24 +86,8 @@ public class KeyValue
             => new Span<byte>((void*)Data, DataLength).ToArray();
     }
 
-    [StructLayout(LayoutKind.Explicit)]
-    public struct KeyResult
-    {
-        [FieldOffset(0)] public byte IsError;
-        [FieldOffset(4)] public int ErrorTag;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public unsafe struct KeyGetResult
-    {
-        [FieldOffset(0)] public byte IsError;
-        [FieldOffset(4)] public nint ValuePtr;
-        [FieldOffset(8)] public int ValueLength;
-        [FieldOffset(4)] public int ErrorTag;
-    }
-
     [StructLayout(LayoutKind.Sequential)]
-    public struct OkResult<T> where T : struct
+    private struct OkResult<T> where T : struct
     {
         public byte IsError;
         public T ResultOrError;
