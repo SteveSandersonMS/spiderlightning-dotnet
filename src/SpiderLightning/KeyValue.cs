@@ -3,13 +3,16 @@ using System.Text;
 
 namespace SpiderLightning;
 
-public partial class KeyValue
+public class KeyValue
 {
-    private int _index;
+    private const string LibraryName = "libSystem.Native"; // It just has to be any name that the pinvoke generator knows about
+
+    private readonly int _index;
 
     public KeyValue(string name)
     {
-        Open(name, Encoding.UTF8.GetByteCount(name), out var result);
+        Open(new WasiString(name), out var result);
+
         if (result.IsError != 0)
         {
             throw new InvalidOperationException($"KeyValue.Open failed with error {result.ErrorTag}");
@@ -20,7 +23,7 @@ public partial class KeyValue
 
     public unsafe byte[] Get(string key)
     {
-        Get(_index, key, Encoding.UTF8.GetByteCount(key), out var result);
+        Get(_index, new WasiString(key), out var result);
 
         if (result.IsError != 0)
         {
@@ -32,7 +35,7 @@ public partial class KeyValue
 
     public string GetString(string key)
     {
-        Get(_index, key, Encoding.UTF8.GetByteCount(key), out var result);
+        Get(_index, new WasiString(key), out var result);
 
         if (result.IsError != 0)
         {
@@ -44,7 +47,7 @@ public partial class KeyValue
 
     public void Set(string key, byte[] value)
     {
-        Set(_index, key, Encoding.UTF8.GetByteCount(key), value, value.Length, out var result);
+        Set(_index, new WasiString(key), new WasiByteArray(value), out var result);
 
         if (result.IsError != 0)
         {
@@ -55,14 +58,42 @@ public partial class KeyValue
     public void Set(string key, string value)
         => Set(key, Encoding.UTF8.GetBytes(value));
 
-    [LibraryImport("libSystem.Native", EntryPoint = "__wasm_import_keyvalue_keyvalue_open")]
-    private static unsafe partial void Open([MarshalAs(UnmanagedType.LPUTF8Str)] string name, int nameLength, out KeyOpenResult result);
+    [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_open")]
+    private static unsafe extern void Open(WasiString name, out KeyOpenResult result);
 
-    [LibraryImport("libSystem.Native", EntryPoint = "__wasm_import_keyvalue_keyvalue_get")]
-    private static unsafe partial void Get(int index, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, int nameLength, out KeyGetResult result);
+    [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_get")]
+    private static unsafe extern void Get(int index, WasiString name, out KeyGetResult result);
 
-    [LibraryImport("libSystem.Native", EntryPoint = "__wasm_import_keyvalue_keyvalue_set")]
-    private static unsafe partial void Set(int index, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, int nameLength, byte[] value, int valueLength, out KeyResult result);
+    [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_set")]
+    private static unsafe extern void Set(int index, WasiString name, WasiByteArray value, out KeyResult result);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe struct WasiString
+    {
+        [MarshalAs(UnmanagedType.LPUTF8Str)]
+        public string String;
+
+        public int StringByteLength;
+
+        public WasiString(string value)
+        {
+            String = value;
+            StringByteLength = Encoding.UTF8.GetByteCount(value);
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe struct WasiByteArray
+    {
+        public byte[] Data;
+        public int DataLength;
+
+        public WasiByteArray(byte[] data)
+        {
+            Data = data;
+            DataLength = data.Length;
+        }
+    }
 
     [StructLayout(LayoutKind.Explicit)]
     public struct KeyResult
@@ -80,10 +111,10 @@ public partial class KeyValue
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public struct KeyGetResult
+    public unsafe struct KeyGetResult
     {
         [FieldOffset(0)] public byte IsError;
-        [FieldOffset(4)] public int ValuePtr;
+        [FieldOffset(4)] public nint ValuePtr;
         [FieldOffset(8)] public int ValueLength;
         [FieldOffset(4)] public int ErrorTag;
     }
