@@ -1,5 +1,3 @@
 ﻿<Project>
-	<ItemGroup>
-		<_WasmNativeFileForLinking Include="$(MSBuildThisFileDirectory)\..\libspiderlightning\libspiderlightning.wasm" />
-	</ItemGroup>
+
 </Project>

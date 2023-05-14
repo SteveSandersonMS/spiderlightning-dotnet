@@ -6,13 +6,9 @@
 		<RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
 	</PropertyGroup>
 
-	<Target Name="FixSpiderLightningPinvokes" AfterTargets="_GenerateManagedToNative">
-		<!-- As of .NET 8 Preview 4, all imports are fixed to be on the 'env' module because no module is specified in pinvokes.h -->
-		<!-- Fix this by injecting a module name -->
-		<WriteLinesToFile
-          File="$(_WasmPInvokeTablePath)"
-          Lines="$([System.Text.RegularExpressions.Regex]::Replace($([System.IO.File]::ReadAllText('$(_WasmPInvokeTablePath)')), '^([a-z0-9]+) __wasm_import_([a-z0-9]+)_', '__attribute__((import_module(&quot;$2&quot;))) $1 __wasm_import_$2_', System.Text.RegularExpressions.RegexOptions.Multiline))"
-          Overwrite="true" />
-	</Target>
-	
+	<ItemGroup>
+		<_WasmNativeFileForLinking Include="$(MSBuildThisFileDirectory)\..\wit\generated\*.c" />
+		<_WasiSdkClangArgs Include="-I&quot;$([System.String]::Copy('$(MSBuildThisFileDirectory)..\wit\generated').Replace('\','/'))&quot;" />
+	</ItemGroup>
+
 </Project>
