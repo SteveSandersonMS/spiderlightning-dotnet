@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SpiderLightning;
@@ -92,18 +93,28 @@ public class KeyValue
         public byte IsError;
         public T ResultOrError;
 
-        public T Unwrap()
+        public unsafe T Unwrap()
         {
             if (IsError != 0)
             {
                 // We can't use fixed layout for generic structs, so manually reinterpret the ResultOrError field as an int
-                var span = MemoryMarshal.CreateSpan(ref ResultOrError, 1);
-                var asInt = MemoryMarshal.Cast<T, int>(span);
-                var errorCode = asInt[0];
-                throw new InvalidOperationException($"The operation failed with error code {errorCode}.");
+                var errorPtr = Unsafe.AsPointer(ref ResultOrError);
+                var error = Marshal.PtrToStructure<WasiError>((nint)errorPtr);
+                throw new InvalidOperationException($"The operation failed with error code {error.Tag} and message '{error.ReadMessage()}'.");
             }
 
             return ResultOrError;
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct WasiError
+    {
+        public byte Tag;
+        public nint MessageUtf8;
+        public int MessageLength;
+
+        public string ReadMessage()
+            => Marshal.PtrToStringUTF8(MessageUtf8, MessageLength);
     }
 }
