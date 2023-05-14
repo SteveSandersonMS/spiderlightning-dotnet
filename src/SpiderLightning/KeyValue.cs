@@ -97,7 +97,7 @@ public class KeyValue
         {
             if (IsError != 0)
             {
-                // We can't use fixed layout for generic structs, so manually reinterpret the ResultOrError field as an int
+                // We can't use fixed layout (unions) for generic structs, so manually reinterpret the ResultOrError field as a WasiError
                 var errorPtr = Unsafe.AsPointer(ref ResultOrError);
                 var error = Marshal.PtrToStructure<WasiError>((nint)errorPtr);
                 throw new InvalidOperationException($"The operation failed with error code {error.Tag} and message '{error.ReadMessage()}'.");
