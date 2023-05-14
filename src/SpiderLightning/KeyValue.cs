@@ -12,60 +12,38 @@ public class KeyValue
     public KeyValue(string name)
     {
         Open(new WasiString(name), out var result);
-
-        if (result.IsError != 0)
-        {
-            throw new InvalidOperationException($"KeyValue.Open failed with error {result.ErrorTag}");
-        }
-
-        _index = result.KeyValueIndex;
+        _index = result.Unwrap();
     }
 
     public unsafe byte[] Get(string key)
     {
         Get(_index, new WasiString(key), out var result);
-
-        if (result.IsError != 0)
-        {
-            throw new InvalidOperationException($"KeyValue.Get failed with error {result.ErrorTag}");
-        }
-
-        return new Span<byte>((void*)result.ValuePtr, result.ValueLength).ToArray();
+        return result.Unwrap().ToArray();
     }
 
     public string GetString(string key)
     {
         Get(_index, new WasiString(key), out var result);
-
-        if (result.IsError != 0)
-        {
-            throw new InvalidOperationException($"KeyValue.Get failed with error {result.ErrorTag}");
-        }
-
-        return Marshal.PtrToStringUTF8(result.ValuePtr, result.ValueLength);
+        return result.Unwrap().ToStringFromUTF8();
     }
 
     public void Set(string key, byte[] value)
     {
         Set(_index, new WasiString(key), new WasiByteArray(value), out var result);
-
-        if (result.IsError != 0)
-        {
-            throw new InvalidOperationException($"KeyValue.Set failed with error {result.ErrorTag}");
-        }
+        result.Unwrap();
     }
 
     public void Set(string key, string value)
         => Set(key, Encoding.UTF8.GetBytes(value));
 
     [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_open")]
-    private static unsafe extern void Open(WasiString name, out KeyOpenResult result);
+    private static extern void Open(WasiString name, out OkResult<int> result);
 
     [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_get")]
-    private static unsafe extern void Get(int index, WasiString name, out KeyGetResult result);
+    private static extern void Get(int index, WasiString name, out OkResult<WasiResultBuffer> result);
 
     [DllImport(LibraryName, EntryPoint = "keyvalue_keyvalue_set")]
-    private static unsafe extern void Set(int index, WasiString name, WasiByteArray value, out KeyResult result);
+    private static extern void Set(int index, WasiString name, WasiByteArray value, out OkResult<int> result);
 
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct WasiString
@@ -95,18 +73,23 @@ public class KeyValue
         }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe struct WasiResultBuffer
+    {
+        public nint Data;
+        public int DataLength;
+
+        public string ToStringFromUTF8()
+            => Marshal.PtrToStringUTF8(Data, DataLength);
+
+        public byte[] ToArray()
+            => new Span<byte>((void*)Data, DataLength).ToArray();
+    }
+
     [StructLayout(LayoutKind.Explicit)]
     public struct KeyResult
     {
         [FieldOffset(0)] public byte IsError;
-        [FieldOffset(4)] public int ErrorTag;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public struct KeyOpenResult
-    {
-        [FieldOffset(0)] public byte IsError;
-        [FieldOffset(4)] public int KeyValueIndex;
         [FieldOffset(4)] public int ErrorTag;
     }
 
@@ -117,5 +100,26 @@ public class KeyValue
         [FieldOffset(4)] public nint ValuePtr;
         [FieldOffset(8)] public int ValueLength;
         [FieldOffset(4)] public int ErrorTag;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct OkResult<T> where T : struct
+    {
+        public byte IsError;
+        public T ResultOrError;
+
+        public T Unwrap()
+        {
+            if (IsError != 0)
+            {
+                // We can't use fixed layout for generic structs, so manually reinterpret the ResultOrError field as an int
+                var span = MemoryMarshal.CreateSpan(ref ResultOrError, 1);
+                var asInt = MemoryMarshal.Cast<T, int>(span);
+                var errorCode = asInt[0];
+                throw new InvalidOperationException($"The operation failed with error code {errorCode}.");
+            }
+
+            return ResultOrError;
+        }
     }
 }
