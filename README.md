@@ -1,4 +1,4 @@
-# .NET on Spiderlightning
+# .NET on SpiderLightning
 
 This is an example of how .NET can be integrated as a guest for [SpiderLightning](https://github.com/deislabs/spiderlightning). It uses the `wasi-experimental` workload which is first available in .NET 8 Preview 4.
 
