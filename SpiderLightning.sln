@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6A20BFA7-8DD3-4625-B210-50637B4F1000}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiderLightning", "src\Spiderlightning\SpiderLightning.csproj", "{7DE85B03-6436-4044-BB8F-E58E3D147CFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiderLightning", "src\SpiderLightning\SpiderLightning.csproj", "{7DE85B03-6436-4044-BB8F-E58E3D147CFF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{483920C5-5704-4FA1-AC37-E6E52000C63F}"
 EndProject
