@@ -112,94 +112,99 @@ void http_handler_expected_response_http_error_free(http_handler_expected_respon
 
 __attribute__((aligned(4)))
 static uint8_t RET_AREA[32];
-__attribute__((import_module("http-handler"), import_name("handle-http")))
-void __wasm_import_http_handler_handle_http(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);
-void http_handler_handle_http(http_handler_request_t *req, http_handler_expected_response_http_error_t *ret0) {
-  int32_t option;
-  int32_t option1;
-  int32_t option2;
-  
-  if (((*req).body).is_some) {
-    const http_handler_body_t *payload0 = &((*req).body).val;
-    option = 1;
-    option1 = (int32_t) (*payload0).ptr;
-    option2 = (int32_t) (*payload0).len;
-    
-  } else {
-    option = 0;
-    option1 = 0;
-    option2 = 0;
-    
-  }
-  int32_t ptr = (int32_t) &RET_AREA;
-  __wasm_import_http_handler_handle_http((int32_t) (*req).method, (int32_t) ((*req).uri).ptr, (int32_t) ((*req).uri).len, (int32_t) ((*req).headers).ptr, (int32_t) ((*req).headers).len, (int32_t) ((*req).params).ptr, (int32_t) ((*req).params).len, option, option1, option2, ptr);
-  http_handler_expected_response_http_error_t expected;
-  switch ((int32_t) (*((uint8_t*) (ptr + 0)))) {
+__attribute__((export_name("handle-http")))
+int32_t __wasm_export_http_handler_handle_http(int32_t arg, int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3, int32_t arg4, int32_t arg5, int32_t arg6, int32_t arg7, int32_t arg8) {
+  http_handler_option_body_t option;
+  switch (arg6) {
     case 0: {
-      expected.is_err = false;
-      http_handler_option_headers_t option3;
-      switch ((int32_t) (*((uint8_t*) (ptr + 8)))) {
-        case 0: {
-          option3.is_some = false;
-          
-          break;
-        }
-        case 1: {
-          option3.is_some = true;
-          
-          option3.val = (http_handler_headers_t) { (http_handler_tuple2_string_string_t*)(*((int32_t*) (ptr + 12))), (size_t)(*((int32_t*) (ptr + 16))) };
-          break;
-        }
-      }http_handler_option_body_t option4;
-      switch ((int32_t) (*((uint8_t*) (ptr + 20)))) {
-        case 0: {
-          option4.is_some = false;
-          
-          break;
-        }
-        case 1: {
-          option4.is_some = true;
-          
-          option4.val = (http_handler_body_t) { (uint8_t*)(*((int32_t*) (ptr + 24))), (size_t)(*((int32_t*) (ptr + 28))) };
-          break;
-        }
-      }
-      expected.val.ok = (http_handler_response_t) {
-        (uint16_t) ((int32_t) (*((uint16_t*) (ptr + 4)))),
-        option3,
-        option4,
-      };
+      option.is_some = false;
+      
       break;
     }
     case 1: {
-      expected.is_err = true;
-      http_handler_http_error_t variant;
-      variant.tag = (int32_t) (*((uint8_t*) (ptr + 4)));
-      switch ((int32_t) variant.tag) {
-        case 0: {
-          variant.val.invalid_url = (http_handler_string_t) { (char*)(*((int32_t*) (ptr + 8))), (size_t)(*((int32_t*) (ptr + 12))) };
-          break;
-        }
-        case 1: {
-          variant.val.timeout_error = (http_handler_string_t) { (char*)(*((int32_t*) (ptr + 8))), (size_t)(*((int32_t*) (ptr + 12))) };
-          break;
-        }
-        case 2: {
-          variant.val.protocol_error = (http_handler_string_t) { (char*)(*((int32_t*) (ptr + 8))), (size_t)(*((int32_t*) (ptr + 12))) };
-          break;
-        }
-        case 3: {
-          variant.val.status_error = (uint16_t) ((int32_t) (*((uint16_t*) (ptr + 8))));
-          break;
-        }
-        case 4: {
-          variant.val.unexpected_error = (http_handler_string_t) { (char*)(*((int32_t*) (ptr + 8))), (size_t)(*((int32_t*) (ptr + 12))) };
-          break;
-        }
-      }
+      option.is_some = true;
       
-      expected.val.err = variant;
+      option.val = (http_handler_body_t) { (uint8_t*)(arg7), (size_t)(arg8) };
       break;
     }
-  }*ret0 = expected;
+  }http_handler_request_t arg9 = (http_handler_request_t) {
+    arg,
+    (http_handler_string_t) { (char*)(arg0), (size_t)(arg1) },
+    (http_handler_headers_t) { (http_handler_tuple2_string_string_t*)(arg2), (size_t)(arg3) },
+    (http_handler_params_t) { (http_handler_tuple2_string_string_t*)(arg4), (size_t)(arg5) },
+    option,
+  };
+  http_handler_expected_response_http_error_t ret;
+  http_handler_handle_http(&arg9, &ret);
+  int32_t ptr = (int32_t) &RET_AREA;
+  
+  if ((ret).is_err) {
+    const http_handler_http_error_t *payload14 = &(ret).val.err;
+    *((int8_t*)(ptr + 0)) = 1;
+    switch ((int32_t) (*payload14).tag) {
+      case 0: {
+        const http_handler_string_t *payload15 = &(*payload14).val.invalid_url;
+        *((int8_t*)(ptr + 4)) = 0;
+        *((int32_t*)(ptr + 12)) = (int32_t) (*payload15).len;
+        *((int32_t*)(ptr + 8)) = (int32_t) (*payload15).ptr;
+        break;
+      }
+      case 1: {
+        const http_handler_string_t *payload16 = &(*payload14).val.timeout_error;
+        *((int8_t*)(ptr + 4)) = 1;
+        *((int32_t*)(ptr + 12)) = (int32_t) (*payload16).len;
+        *((int32_t*)(ptr + 8)) = (int32_t) (*payload16).ptr;
+        break;
+      }
+      case 2: {
+        const http_handler_string_t *payload17 = &(*payload14).val.protocol_error;
+        *((int8_t*)(ptr + 4)) = 2;
+        *((int32_t*)(ptr + 12)) = (int32_t) (*payload17).len;
+        *((int32_t*)(ptr + 8)) = (int32_t) (*payload17).ptr;
+        break;
+      }
+      case 3: {
+        const uint16_t *payload18 = &(*payload14).val.status_error;
+        *((int8_t*)(ptr + 4)) = 3;
+        *((int16_t*)(ptr + 8)) = (int32_t) (*payload18);
+        break;
+      }
+      case 4: {
+        const http_handler_string_t *payload19 = &(*payload14).val.unexpected_error;
+        *((int8_t*)(ptr + 4)) = 4;
+        *((int32_t*)(ptr + 12)) = (int32_t) (*payload19).len;
+        *((int32_t*)(ptr + 8)) = (int32_t) (*payload19).ptr;
+        break;
+      }
+    }
+    
+  } else {
+    const http_handler_response_t *payload = &(ret).val.ok;
+    *((int8_t*)(ptr + 0)) = 0;
+    *((int16_t*)(ptr + 4)) = (int32_t) ((*payload).status);
+    
+    if (((*payload).headers).is_some) {
+      const http_handler_headers_t *payload11 = &((*payload).headers).val;
+      *((int8_t*)(ptr + 8)) = 1;
+      *((int32_t*)(ptr + 16)) = (int32_t) (*payload11).len;
+      *((int32_t*)(ptr + 12)) = (int32_t) (*payload11).ptr;
+      
+    } else {
+      *((int8_t*)(ptr + 8)) = 0;
+      
+    }
+    
+    if (((*payload).body).is_some) {
+      const http_handler_body_t *payload13 = &((*payload).body).val;
+      *((int8_t*)(ptr + 20)) = 1;
+      *((int32_t*)(ptr + 28)) = (int32_t) (*payload13).len;
+      *((int32_t*)(ptr + 24)) = (int32_t) (*payload13).ptr;
+      
+    } else {
+      *((int8_t*)(ptr + 20)) = 0;
+      
+    }
+    
+  }
+  return ptr;
 }

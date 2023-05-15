@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WebServer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+      },
+      "applicationUrl": "http://localhost:3000"
+    }
+  }
+}

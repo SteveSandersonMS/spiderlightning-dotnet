@@ -49,24 +49,22 @@ void http_server_export_expected_unit_string_free(http_server_export_expected_un
 
 __attribute__((aligned(4)))
 static uint8_t RET_AREA[12];
-__attribute__((import_module("http-server-export"), import_name("on-server-init")))
-void __wasm_import_http_server_export_on_server_init(int32_t);
-void http_server_export_on_server_init(http_server_export_expected_unit_string_t *ret0) {
+__attribute__((export_name("on-server-init")))
+int32_t __wasm_export_http_server_export_on_server_init(void) {
+  http_server_export_expected_unit_string_t ret;
+  http_server_export_on_server_init(&ret);
   int32_t ptr = (int32_t) &RET_AREA;
-  __wasm_import_http_server_export_on_server_init(ptr);
-  http_server_export_expected_unit_string_t expected;
-  switch ((int32_t) (*((uint8_t*) (ptr + 0)))) {
-    case 0: {
-      expected.is_err = false;
-      
-      
-      break;
-    }
-    case 1: {
-      expected.is_err = true;
-      
-      expected.val.err = (http_server_export_string_t) { (char*)(*((int32_t*) (ptr + 4))), (size_t)(*((int32_t*) (ptr + 8))) };
-      break;
-    }
-  }*ret0 = expected;
+  
+  if ((ret).is_err) {
+    const http_server_export_string_t *payload0 = &(ret).val.err;
+    *((int8_t*)(ptr + 0)) = 1;
+    *((int32_t*)(ptr + 8)) = (int32_t) (*payload0).len;
+    *((int32_t*)(ptr + 4)) = (int32_t) (*payload0).ptr;
+    
+  } else {
+    
+    *((int8_t*)(ptr + 0)) = 0;
+    
+  }
+  return ptr;
 }

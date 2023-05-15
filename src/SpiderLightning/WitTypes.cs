@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace SpiderLightning;
@@ -16,6 +17,11 @@ internal unsafe struct WitString
     {
         String = value;
         StringByteLength = Encoding.UTF8.GetByteCount(value);
+    }
+
+    public override string ToString()
+    {
+        return String;
     }
 }
 
@@ -38,11 +44,25 @@ internal unsafe struct WitBuffer
     public nint Data;
     public int DataLength;
 
+    public static WitBuffer FromStringAsUTF8(string value)
+        => new WitBuffer { Data = (nint)Utf8StringMarshaller.ConvertToUnmanaged(value), DataLength = Encoding.UTF8.GetByteCount(value) };
+
     public string ToStringFromUTF8()
         => Marshal.PtrToStringUTF8(Data, DataLength);
 
     public byte[] ToArray()
         => new Span<byte>((void*)Data, DataLength).ToArray();
+}
+
+[StructLayout(LayoutKind.Sequential)]
+internal struct WitOption<T> where T : struct
+{
+    private byte _isSome;
+    private T _value;
+
+    public T? Value => (_isSome == 1) ? _value : default;
+
+    public static implicit operator WitOption<T>(T value) => new WitOption<T> { _isSome = 1, _value = value };
 }
 
 [StructLayout(LayoutKind.Sequential)]
