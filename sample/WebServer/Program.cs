@@ -2,7 +2,7 @@ using SpiderLightning;
 
 HttpServer.OnServerInit(() =>
 {
-    const string address = "0.0.0.0:3000";
+    const string address = "localhost:3000";
 
     new HttpRouter()
         .Get("/")
