@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<RunCommand>slight</RunCommand>
-		<RunArguments>-c slightfile.toml run bin\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\AppBundle\$(AssemblyName).wasm -l</RunArguments>
+		<RunArguments>-c slightfile.toml run bin/$(Configuration)/$(TargetFramework)/$(RuntimeIdentifier)/AppBundle/$(AssemblyName).wasm -l</RunArguments>
 		<RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
 	</PropertyGroup>
 
