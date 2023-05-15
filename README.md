@@ -5,7 +5,7 @@ This is an example of how .NET can be integrated as a guest for [SpiderLightning
 ## Prerequisites
 
 * .NET 8 Preview 4 or later
-  * If this is not yet released (which it isn't, at the time of writing), download it from [.NET Daily Builds](https://github.com/dotnet/core/blob/main/daily-builds.md)
+  * If this is not yet released (which it isn't, at the time of writing), download it from [.NET Daily Builds](https://github.com/dotnet/installer/blob/main/README.md#installers-and-binaries)
   * Verify that `dotnet --version` tells you it's .NET 8 Preview 4 or later
 * Install the `wasi-experimental` workload
   * Run `dotnet workload install wasi-experimental`
