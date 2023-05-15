@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<_WasmNativeFileForLinking Include="$(MSBuildThisFileDirectory)\..\http_server_exports.c" />
+		<_WasmNativeFileForLinking Include="$(MSBuildThisFileDirectory)\..\Http\http_server_exports.c" />
 		<_WasmNativeFileForLinking Include="$(MSBuildThisFileDirectory)\..\wit\generated\*.c" />
 		<_WasiSdkClangArgs Include="-I&quot;$([System.String]::Copy('$(MSBuildThisFileDirectory)..\wit\generated').Replace('\','/'))&quot;" />
 	</ItemGroup>

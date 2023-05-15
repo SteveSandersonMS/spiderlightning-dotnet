@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <wasm/driver.h>
-#include "wit/generated/http-handler.h"
-#include "wit/generated/http-server-export.h"
+#include "../wit/generated/http-handler.h"
+#include "../wit/generated/http-server-export.h"
 
 int dotnet_started = 0;
 void _start();
