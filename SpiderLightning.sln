@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiderLightning", "src\Spid
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{483920C5-5704-4FA1-AC37-E6E52000C63F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "sample\SampleApp\SampleApp.csproj", "{A0E2F946-32C5-4A4E-99BF-64D1AE8CA61F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "sample\ConsoleApp\ConsoleApp.csproj", "{A0E2F946-32C5-4A4E-99BF-64D1AE8CA61F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "sample\WebServer\WebServer.csproj", "{A1BB1137-7201-4DDD-9C0C-C83DDCEFE583}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer", "sample\WebServer\WebServer.csproj", "{A1BB1137-7201-4DDD-9C0C-C83DDCEFE583}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
