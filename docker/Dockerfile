@@ -4,11 +4,16 @@ RUN wget https://github.com/deislabs/spiderlightning/releases/download/v0.5.0/sl
 RUN mkdir slight
 RUN tar -xf slight-linux-x86_64.tar.gz -C slight
 
-FROM ghcr.io/webassembly/wasi-sdk
+RUN wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-20/wasi-sdk-20.0-linux.tar.gz
+RUN mkdir wasi-sdk
+RUN tar -xf wasi-sdk-20.0-linux.tar.gz -C wasi-sdk
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy
+
+COPY --from=installer /wasi-sdk /wasi-sdk
+ENV WASI_SDK_PATH=/wasi-sdk/
 
 COPY --from=installer /slight /slight
 RUN ln -s /slight/slight /usr/bin/slight
 
-COPY --from=mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy /usr/share/dotnet /usr/share/dotnet
-RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 RUN dotnet workload install wasi-experimental -s https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json
