@@ -13,7 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy
 COPY --from=installer /wasi-sdk/wasi-sdk-20.0/ /wasi-sdk
 ENV WASI_SDK_PATH=/wasi-sdk/
 
-COPY --from=installer /slight /slight
-RUN ln -s /slight/slight /usr/bin/slight
+COPY --from=installer /slight/release/slight /usr/bin/
 
 RUN dotnet workload install wasi-experimental -s https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json
