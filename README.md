@@ -2,6 +2,8 @@
 
 This is an example of how .NET can be integrated as a guest for [SpiderLightning](https://github.com/deislabs/spiderlightning). It uses the `wasi-experimental` workload which is first available in .NET 8 Preview 4.
 
+A [Dockerfile](docker/Dockerfile) has been provided to enable [using these examples in a container](docker/README.md).
+
 ## Prerequisites
 
 * .NET 8 Preview 4 or later
