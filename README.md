@@ -10,7 +10,7 @@ A [Dockerfile](docker/Dockerfile) has been provided to enable [using these examp
   * If this is not yet released (which it isn't, at the time of writing), download it from [.NET Daily Builds](https://github.com/dotnet/installer/blob/main/README.md#installers-and-binaries)
   * Verify that `dotnet --version` tells you it's .NET 8 Preview 4 or later
 * Install the `wasi-experimental` workload
-  * Run `dotnet workload install wasi-experimental -s https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json`
+  * Run `dotnet workload install wasi-experimental
 * WASI SDK
   * Download from [wasi-sdk releases page](https://github.com/WebAssembly/wasi-sdk/releases). If you're using Windows, you need the one with `mingw` in its name.
   * Create an environment variable called `WASI_SDK_PATH` giving the path where you extracted the WASI SDK download, i.e., the directory containing `bin`/`lib`/`share`.
