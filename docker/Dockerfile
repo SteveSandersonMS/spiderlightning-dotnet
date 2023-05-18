@@ -1,0 +1,14 @@
+FROM alpine AS installer
+
+RUN wget https://github.com/deislabs/spiderlightning/releases/download/v0.5.0/slight-linux-x86_64.tar.gz
+RUN mkdir slight
+RUN tar -xf slight-linux-x86_64.tar.gz -C slight
+
+FROM ghcr.io/webassembly/wasi-sdk
+
+COPY --from=installer /slight /slight
+RUN ln -s /slight/slight /usr/bin/slight
+
+COPY --from=mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy /usr/share/dotnet /usr/share/dotnet
+RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+RUN dotnet workload install wasi-experimental -s https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json
