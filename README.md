@@ -7,7 +7,7 @@ A [Dockerfile](docker/Dockerfile) has been provided to enable [using these examp
 ## Prerequisites
 
 * .NET 8 Preview 4 or later
-  * If this is not yet released (which it isn't, at the time of writing), download it from [.NET Daily Builds](https://github.com/dotnet/installer/blob/main/README.md#installers-and-binaries)
+  * This can be downloaded from [Download .NET 8.0 (Linux, macOS, and Windows)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
   * Verify that `dotnet --version` tells you it's .NET 8 Preview 4 or later
 * Install the `wasi-experimental` workload
   * Run `dotnet workload install wasi-experimental`
