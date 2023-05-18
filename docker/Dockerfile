@@ -15,4 +15,4 @@ COPY --from=installer /wasi-sdk/wasi-sdk-20.0/ $WASI_SDK_PATH
 
 COPY --from=installer /slight/release/slight /usr/bin/
 
-RUN dotnet workload install wasi-experimental -s https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json
+RUN dotnet workload install wasi-experimental
