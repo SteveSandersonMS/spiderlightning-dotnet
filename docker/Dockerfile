@@ -10,7 +10,7 @@ RUN tar -xf wasi-sdk-20.0-linux.tar.gz -C wasi-sdk
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview-jammy
 
-COPY --from=installer /wasi-sdk /wasi-sdk
+COPY --from=installer /wasi-sdk/wasi-sdk-20.0/ /wasi-sdk
 ENV WASI_SDK_PATH=/wasi-sdk/
 
 COPY --from=installer /slight /slight
